@@ -21,25 +21,28 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"kuangtsao.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.8.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
-<meta name="description" content="鐵柵間的微光指引我的道路">
-<meta property="og:type" content="website">
-<meta property="og:title" content="囚徒的窗格">
-<meta property="og:url" content="https://kuangtsao.github.io/index.html">
+<meta name="description" content="這個學期主要進行的是： Javascript 概念上的加深 ex. scope 資料結構簡介與設計 函式(function)介紹CSS CSS 佈局工具 BootStrap 介紹與使用 RWD 簡介DOM 操作與事件處理 簡介 DOM 操作 DOM 實際設計事件驅動程式  在這四個禮拜內，這些內容說多也算多，說說少也不少；內容如同我之前的感受一樣，看起來很難，但實際上參與進去之後會發現還蠻簡單的或">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Alphacamp 學期 2-1 學習回饋">
+<meta property="og:url" content="https://kuangtsao.github.io/2021/11/12/alphacamp-2-1/index.html">
 <meta property="og:site_name" content="囚徒的窗格">
-<meta property="og:description" content="鐵柵間的微光指引我的道路">
+<meta property="og:description" content="這個學期主要進行的是： Javascript 概念上的加深 ex. scope 資料結構簡介與設計 函式(function)介紹CSS CSS 佈局工具 BootStrap 介紹與使用 RWD 簡介DOM 操作與事件處理 簡介 DOM 操作 DOM 實際設計事件驅動程式  在這四個禮拜內，這些內容說多也算多，說說少也不少；內容如同我之前的感受一樣，看起來很難，但實際上參與進去之後會發現還蠻簡單的或">
 <meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2021-11-11T16:59:15.000Z">
+<meta property="article:modified_time" content="2021-11-11T17:55:30.150Z">
 <meta property="article:author" content="Marcus Liu">
+<meta property="article:tag" content="alphacamp">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://kuangtsao.github.io/">
+<link rel="canonical" href="https://kuangtsao.github.io/2021/11/12/alphacamp-2-1/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-TW","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://kuangtsao.github.io/2021/11/12/alphacamp-2-1/","path":"2021/11/12/alphacamp-2-1/","title":"Alphacamp 學期 2-1 學習回饋"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>囚徒的窗格</title>
+<title>Alphacamp 學期 2-1 學習回饋 | 囚徒的窗格</title>
   
 
 
@@ -93,7 +96,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目錄
@@ -106,6 +109,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Javascript"><span class="nav-number">1.</span> <span class="nav-text">Javascript</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS"><span class="nav-number">2.</span> <span class="nav-text">CSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DOM-%E6%93%8D%E4%BD%9C%E8%88%87%E4%BA%8B%E4%BB%B6%E8%99%95%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">DOM 操作與事件處理</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -151,16 +155,17 @@
 </noscript>
 
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://kuangtsao.github.io/2021/11/12/alphacamp-2-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -173,9 +178,9 @@
       <meta itemprop="name" content="囚徒的窗格">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/12/alphacamp-2-1/" class="post-title-link" itemprop="url">Alphacamp 學期 2-1 學習回饋</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          Alphacamp 學期 2-1 學習回饋
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -199,7 +204,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>這個學期主要進行的是：</p>
+        <p>這個學期主要進行的是：</p>
 <h3 id="Javascript"><a href="#Javascript" class="headerlink" title="Javascript"></a>Javascript</h3><ul>
 <li>概念上的加深 ex. scope</li>
 <li>資料結構簡介與設計</li>
@@ -215,7 +220,6 @@
 <p>不過其實最想談的是，這一個學習我歷經了身份的轉變，由工作中進修變成了全職學習，目前反而遇到的挑戰比較是如何保持專注在學習上，以及如何真的完成自己排下的進度—由於我之前是擔任維運工程師，也順便希望加強一些自己不足的東西，比如：aws(主要希望摸透<br>SAA),K8s，但目前的時間點也還沒開始動。</p>
 <p>希望進入到下一個學習階段時，能夠找到專注及處理焦慮的方式，以及能夠好好完成自己與 AC 排定的進度。</p>
 
-      
     </div>
 
     
@@ -223,87 +227,25 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          <div class="post-tags">
+              <a href="/tags/alphacamp/" rel="tag"># alphacamp</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/11/11/hello-world/" rel="prev" title="Hello World">
+                  <i class="fa fa-chevron-left"></i> Hello World
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
     </footer>
   </article>
 </div>
 
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://kuangtsao.github.io/2021/11/11/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Marcus Liu">
-      <meta itemprop="description" content="鐵柵間的微光指引我的道路">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="囚徒的窗格">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/11/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-
-      <time title="創建時間：2021-11-11 22:32:56" itemprop="dateCreated datePublished" datetime="2021-11-11T22:32:56+08:00">2021-11-11</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
 
 
 
