@@ -186,7 +186,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2022-02-14 00:33:55 / 修改時間：00:53:32" itemprop="dateCreated datePublished" datetime="2022-02-14T00:33:55+08:00">2022-02-14</time>
+      <time title="創建時間：2022-02-14 00:33:55 / 修改時間：01:03:31" itemprop="dateCreated datePublished" datetime="2022-02-14T00:33:55+08:00">2022-02-14</time>
     </span>
 
   
@@ -201,9 +201,9 @@
     <div class="post-body" itemprop="articleBody">
           <h2 id="什麼是-event-loop？"><a href="#什麼是-event-loop？" class="headerlink" title="什麼是 event loop？"></a>什麼是 event loop？</h2><p>Event loop 是一種 design pattern，處理事件該在哪時候執行；瀏覽器與 nodejs runtime 對此的實作，利用裡面包含的 javascript runtime main loop 裡面的 stack 紀錄事件，再利用 queue 記錄非同步(async)事件處理完的 callback (這個 queue 又被稱為 callback queue 或者 event queue)，這個 callback 通常會是一些 function；event loop 會隨時檢查 stack ，只要發現 stack 本身的事件處理完後，再將 queue 裡面的事件推到 stack 再作執行。</p>
 <h2 id="所以-event-loop-到底是…？"><a href="#所以-event-loop-到底是…？" class="headerlink" title="所以 event loop 到底是…？"></a>所以 event loop 到底是…？</h2><p>為了搞清楚這件事<del>(同時也是 alpha camp 的其中一項作業)</del> ，首先，我們先從 Event Loop 上先做理解，萬事不決先找 google 和 wiki，然後我找到了蠻多基於瀏覽器 event loop，也就是大名鼎鼎的 <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=8aGhZQkoFbQ">what the heck is event loop?</a> 這場在 JSConfEU 2014 的演講的解說，以及大名鼎鼎的這張圖。</p>
-<p><img src="/public/images/event-loop.png" alt="Untitled"></p>
+<p><img src="/source/images/event-loop.png" alt="Untitled"></p>
 <p>再看了一下 google 搜尋推薦的關鍵字，發現了一點不對。</p>
-<p><img src="/public/images/search-event-loop.png" alt="Untitled"></p>
+<p><img src="/source/images/search-event-loop.png" alt="Untitled"></p>
 <p>python 也有個 event loop，直覺上而言，這一定是個通用的技巧，於是搜尋了 wiki，找到了以下的內容：</p>
 <blockquote>
 <p>In <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Computer_science">computer science</a>, the <strong>event loop</strong> is a programming construct or <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Software_design_pattern">design pattern</a> that waits for and dispatches <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Event-driven_programming">events</a> or <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Message_Passing_Interface">messages</a>  in a <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Computer_program">program</a>. The event loop works by making a request to some internal or external “event provider” (that generally <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Blocking_(computing)">blocks</a> the request until an event has arrived), then calls the relevant <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Event_handler">event handler</a>(“dispatches the event”). The event loop is also sometimes referred to as the <strong>message dispatcher</strong>, <strong>message loop</strong>, <strong>message pump</strong><br>, or <strong>run loop</strong>.</p>
@@ -219,7 +219,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function multiply(a, b) &#123;</span><br><span class="line">  return a * b</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function square(n) &#123;</span><br><span class="line">  return multiply(n, n)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function printSquare(n) &#123;</span><br><span class="line">  let squared = square(n)</span><br><span class="line">  console.log(squared)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">printSquare(4)</span><br></pre></td></tr></table></figure>
 
 <p>在我們撰寫 javascript 時，有一個常見的說法是「javascript 是由上往下執行」，指的就是這個塞入 stack 執行的過程，由上而下讀完之後，再從 printSquare(4) 開始反向塞起，由於 printSquare 是一個函式呼叫(function call)，所以就塞入 main stack，接著又發現有 printSquare 這個函式，就不斷的塞入直到 multiply() 也進入為止；接著再從 multiply() 開始跳出(執行)，直到 printSquare(4) 跳出，整個程式就執行完了。</p>
-<h3 id="瀏覽器實作的-event-loop"><a href="#瀏覽器實作的-event-loop" class="headerlink" title="瀏覽器實作的 event loop"></a>瀏覽器實作的 event loop</h3><p><img src="/public/images/event-loop.png" alt="Untitled"></p>
+<h3 id="瀏覽器實作的-event-loop"><a href="#瀏覽器實作的-event-loop" class="headerlink" title="瀏覽器實作的 event loop"></a>瀏覽器實作的 event loop</h3><p><img src="/source/images/event-loop.png" alt="Untitled"></p>
 <p>再拿這張圖說說瀏覽器的 event loop 怎麽實作的。我們以一段 code 來理解瀏覽器怎麽運作</p>
 <figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;I am&#x27;</span>)</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> <span class="title">timer</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  	<span class="built_in">console</span>.log(<span class="string">&#x27;!&#x27;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Ironman&#x27;</span>)</span><br></pre></td></tr></table></figure>
 
