@@ -21,25 +21,32 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"kuangtsao.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.8.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
-<meta name="description" content="鐵柵間的微光指引我的道路">
-<meta property="og:type" content="website">
-<meta property="og:title" content="囚徒的窗格">
-<meta property="og:url" content="https://kuangtsao.github.io/index.html">
+<meta name="description" content="什麼是 event loop？Event loop 是一種 design pattern，處理事件該在哪時候執行；瀏覽器與 nodejs runtime 對此的實作，利用裡面包含的 javascript runtime main loop 裡面的 stack 紀錄事件，再利用 queue 記錄非同步(async)事件處理完的 callback (這個 queue 又被稱為 callback que">
+<meta property="og:type" content="article">
+<meta property="og:title" content="browser-event-loop">
+<meta property="og:url" content="https://kuangtsao.github.io/2022/02/14/browser-event-loop/index.html">
 <meta property="og:site_name" content="囚徒的窗格">
-<meta property="og:description" content="鐵柵間的微光指引我的道路">
+<meta property="og:description" content="什麼是 event loop？Event loop 是一種 design pattern，處理事件該在哪時候執行；瀏覽器與 nodejs runtime 對此的實作，利用裡面包含的 javascript runtime main loop 裡面的 stack 紀錄事件，再利用 queue 記錄非同步(async)事件處理完的 callback (這個 queue 又被稱為 callback que">
 <meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://kuangtsao.github.io/public/images/event-loop.png">
+<meta property="og:image" content="https://kuangtsao.github.io/public/images/search-event-loop.png">
+<meta property="og:image" content="https://kuangtsao.github.io/public/images/event-loop.png">
+<meta property="article:published_time" content="2022-02-13T16:33:55.000Z">
+<meta property="article:modified_time" content="2022-02-13T16:53:32.640Z">
 <meta property="article:author" content="Marcus Liu">
+<meta property="article:tag" content="alphacamp,javascript,event loop">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kuangtsao.github.io/public/images/event-loop.png">
 
 
-<link rel="canonical" href="https://kuangtsao.github.io/">
+<link rel="canonical" href="https://kuangtsao.github.io/2022/02/14/browser-event-loop/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-TW","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://kuangtsao.github.io/2022/02/14/browser-event-loop/","path":"2022/02/14/browser-event-loop/","title":"browser-event-loop"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>囚徒的窗格</title>
+<title>browser-event-loop | 囚徒的窗格</title>
   
 
 
@@ -93,7 +100,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目錄
@@ -106,6 +113,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-event-loop%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什麼是 event loop？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%80%E4%BB%A5-event-loop-%E5%88%B0%E5%BA%95%E6%98%AF%E2%80%A6%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">所以 event loop 到底是…？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Javascript-%E7%9A%84%E4%B8%80%E6%AE%B5%E6%AD%B7%E5%8F%B2%E8%88%87%E5%AE%83%E7%9A%84%E7%89%B9%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">Javascript 的一段歷史與它的特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stack-amp-queue"><span class="nav-number">4.</span> <span class="nav-text">stack &amp; queue</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%80%8F%E8%A6%BD%E5%99%A8%E5%AF%A6%E4%BD%9C%E7%9A%84-event-loop"><span class="nav-number">4.1.</span> <span class="nav-text">瀏覽器實作的 event loop</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -151,16 +159,17 @@
 </noscript>
 
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://kuangtsao.github.io/2022/02/14/browser-event-loop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -173,9 +182,9 @@
       <meta itemprop="name" content="囚徒的窗格">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/02/14/browser-event-loop/" class="post-title-link" itemprop="url">browser-event-loop</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          browser-event-loop
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -199,7 +208,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="什麼是-event-loop？"><a href="#什麼是-event-loop？" class="headerlink" title="什麼是 event loop？"></a>什麼是 event loop？</h2><p>Event loop 是一種 design pattern，處理事件該在哪時候執行；瀏覽器與 nodejs runtime 對此的實作，利用裡面包含的 javascript runtime main loop 裡面的 stack 紀錄事件，再利用 queue 記錄非同步(async)事件處理完的 callback (這個 queue 又被稱為 callback queue 或者 event queue)，這個 callback 通常會是一些 function；event loop 會隨時檢查 stack ，只要發現 stack 本身的事件處理完後，再將 queue 裡面的事件推到 stack 再作執行。</p>
+        <h2 id="什麼是-event-loop？"><a href="#什麼是-event-loop？" class="headerlink" title="什麼是 event loop？"></a>什麼是 event loop？</h2><p>Event loop 是一種 design pattern，處理事件該在哪時候執行；瀏覽器與 nodejs runtime 對此的實作，利用裡面包含的 javascript runtime main loop 裡面的 stack 紀錄事件，再利用 queue 記錄非同步(async)事件處理完的 callback (這個 queue 又被稱為 callback queue 或者 event queue)，這個 callback 通常會是一些 function；event loop 會隨時檢查 stack ，只要發現 stack 本身的事件處理完後，再將 queue 裡面的事件推到 stack 再作執行。</p>
 <h2 id="所以-event-loop-到底是…？"><a href="#所以-event-loop-到底是…？" class="headerlink" title="所以 event loop 到底是…？"></a>所以 event loop 到底是…？</h2><p>為了搞清楚這件事<del>(同時也是 alpha camp 的其中一項作業)</del> ，首先，我們先從 Event Loop 上先做理解，萬事不決先找 google 和 wiki，然後我找到了蠻多基於瀏覽器 event loop，也就是大名鼎鼎的 <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=8aGhZQkoFbQ">what the heck is event loop?</a> 這場在 JSConfEU 2014 的演講的解說，以及大名鼎鼎的這張圖。</p>
 <p><img src="/public/images/event-loop.png" alt="Untitled"></p>
 <p>再看了一下 google 搜尋推薦的關鍵字，發現了一點不對。</p>
@@ -234,7 +243,6 @@
 <p>瀏覽器會在每個 60 FPS 的時候更新渲染畫面，而渲染的執行順序高於 callback function。</p>
 <p>以上的程式碼執行，會先優先執行 Synchronous 這段的程式碼，透過 <a target="_blank" rel="noopener" href="http://latentflip.com/loupe/">loupe</a> 觀察，可以看到，render queue 會被 hold 住，所以如果需要一段時間執行的程式碼，可以丟去 async 跑。</p>
 
-      
     </div>
 
     
@@ -242,277 +250,25 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          <div class="post-tags">
+              <a href="/tags/alphacamp-javascript-event-loop/" rel="tag"># alphacamp,javascript,event loop</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/01/28/how-to-make-alert-popup/" rel="prev" title="如何利用 handlebars 做出警告提示">
+                  <i class="fa fa-chevron-left"></i> 如何利用 handlebars 做出警告提示
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
     </footer>
   </article>
 </div>
 
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://kuangtsao.github.io/2022/01/28/how-to-make-alert-popup/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Marcus Liu">
-      <meta itemprop="description" content="鐵柵間的微光指引我的道路">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="囚徒的窗格">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/01/28/how-to-make-alert-popup/" class="post-title-link" itemprop="url">如何利用 handlebars 做出警告提示</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2022-01-28 17:01:22 / 修改時間：19:05:06" itemprop="dateCreated datePublished" datetime="2022-01-28T17:01:22+08:00">2022-01-28</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>alphacamp 在學期 2-3 有一份作業，是根據教材中打造電影清單的方式，依樣畫葫蘆的做出餐廳清單。其中作業驗收的標準「行有餘力」的部分有提到可以擴充的規格裡有一項：「搜尋沒有結果時也有對應頁面提示」，在寫這份作業的當下覺得必要的功能大致上差不多了，在之前的作業也曾經想要挑戰類似的功能但後來實在想不到怎麼實作，就來挑戰看看這個項目。</p>
-<p>在當下，我完全腦袋一片空白，要怎麼做出來毫無頭緒，嘗試搜尋看看有沒有相關例子可以拿來參考，但在網路資料的大海完全找不到。</p>
-<p>後來想想，若要解決問題必先拆解，於是開始構思起整個功能該怎麼實做：  </p>
-<ul>
-<li>如果是搜尋所產生的其中一種結果<ul>
-<li>這個功能一定與搜尋相關<ul>
-<li>所以一定是由後端產生結果</li>
-</ul>
-</li>
-<li>這個功能會跳出一項警告<ul>
-<li>會從畫面看到這個警告，前端要顯示</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>搭配這個作業所使用的 <a target="_blank" rel="noopener" href="https://github.com/kuangtsao/ac-restaurantList">repo</a>，會有效協助還原當時的一些過程與想法，請先 clone 下來後，利用 <code>git checkout alert-pop</code>後，再 <code>git reset f1502288</code>，利用<code>npm run dev</code> 跑起來後，接著再利用 <code>git reset</code> 去跳 commit 在本地端觀察，或者利用 github 本身紀錄該專案的<a target="_blank" rel="noopener" href="https://github.com/kuangtsao/ac-restaurantList/commits/master">所有 commits 的頁面</a><br>切換到 alert-pop 以利觀察。  </p>
-</blockquote>
-<blockquote>
-<p>下段請跳到 alert-pop branch 的 commit f150228</p>
-</blockquote>
-<p>在紙上寫下這些想法後，於是先找起 bootstrap 5 對於 <a target="_blank" rel="noopener" href="https://getbootstrap.com/docs/5.1/components/alerts/">alert</a> 的說明，先把它加進 <code>index.handlebars</code> 裡面。  </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;alert alert-warning alert-dismissible fade show&quot; role=&quot;alert&quot;&gt;</span><br><span class="line">  &lt;strong&gt;Holy guacamole!&lt;/strong&gt; You should check in on some of those fields below.</span><br><span class="line">  &lt;button type=&quot;button&quot; class=&quot;btn-close&quot; data-bs-dismiss=&quot;alert&quot; aria-label=&quot;Close&quot;&gt;&lt;/button&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-<p>於是我就得到了會跑版的警告橫條，接著再反覆試驗，先無視跑版，將複製貼上的 html 裡面的說明文改成搜尋失敗會出現的警告文字就行了。  </p>
-<p>index.handlebars</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;alert alert-warning alert-dismissible fade show mt-4&quot; role=&quot;alert&quot;&gt;</span><br><span class="line">  &lt;strong&gt;找不到餐廳！&lt;/strong&gt; 請重新考慮關鍵字！(餐廳中英文名字或類別！)</span><br><span class="line">  &lt;button type=&quot;button&quot; class=&quot;btn-close&quot; data-bs-dismiss=&quot;alert&quot; aria-label=&quot;Close&quot;&gt;&lt;/button&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>下段請跳到 alert-pop branch 的 commit 8291373</p>
-</blockquote>
-<p>接著再考慮怎麼樣讓這個畫面跑出來，在教案之中，我們學到利用 handlebars 在前端的 html 中，傳輸必要的內容以及利用迴圈產生會重複出現的 html 區塊。當時想著：「既然有迴圈，那 handlebars 應該有類似 if-else 的流程控制吧？」果不其然的再它們<a target="_blank" rel="noopener" href="https://handlebarsjs.com/guide/builtin-helpers.html">官網文件</a>上找到了 if 和 unless 的敘述。</p>
-<p>那接著就是再決定這個 flag 該怎麼產生了。當時是透過搜尋按鈕觸發 <code>/search</code> 這個路由，那再透過 <code>information</code> 這個陣列 filter 後的長度決定是跳到首頁或者呈現搜尋結果。</p>
-<p>接著再決定 flag 怎麼管理，當時單純地想著利用全域變數去做管理，所以程式碼就像下面這樣。</p>
-<p>app.js</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">let findingStatus = true</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">app.get(&#x27;/search&#x27;, (req, res) =&gt; &#123;</span><br><span class="line">  // 搜尋字串去除空白</span><br><span class="line">  const keyword = req.query.keyword.trim()</span><br><span class="line">  // 只要關鍵字符合其中一個，就返回內容到陣列</span><br><span class="line">  const information = restaurantList.results.filter(information =&gt; information.category.includes(keyword) || information.name.includes(keyword) || information.name_en.toLowerCase().includes(keyword.toLowerCase()))</span><br><span class="line"></span><br><span class="line">  // 搜尋時會重複多次 /search 路由，所以每次進入都要重新管理</span><br><span class="line"></span><br><span class="line">  if (information.length &gt; 0) &#123;</span><br><span class="line">    findingStatus = true</span><br><span class="line">    res.render(&#x27;index&#x27;, &#123; restaurants: information , findingStatus: findingStatus &#125;)</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    res.render(&#x27;index&#x27;, &#123; restaurants: information &#125;)</span><br><span class="line">    findingStatus = false</span><br><span class="line">    res.render(&#x27;index&#x27;, &#123; restaurants: restaurantList.results, findingStatus: findingStatus &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>考慮到 <code>findingStatus</code> 的語意與 if 的流程，在 <code>index.handlebars</code> 裡面採用 <code>unless</code> 實作。<br>index.handlebars</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;#unless findingStatus&#125;&#125;</span><br><span class="line">&lt;div class=&quot;alert alert-warning alert-dismissible fade show mt-4&quot; role=&quot;alert&quot;&gt;</span><br><span class="line">  &lt;strong&gt;找不到餐廳！&lt;/strong&gt; 請重新考慮關鍵字！(餐廳中英文名字或類別！)</span><br><span class="line">  &lt;button type=&quot;button&quot; class=&quot;btn-close&quot; data-bs-dismiss=&quot;alert&quot; aria-label=&quot;Close&quot;&gt;&lt;/button&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&#123;&#123;/unless&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-<p>到此功能整體完成，之後在調整版面，以及引入 <code>font-awesome</code> 的 icon 美化版面。</p>
-<p>回顧這個功能怎麼做出來的，其實寫到現在大致上可以歸納出三點：  </p>
-<ol>
-<li>分解問題，讓這個問題變成較小的區塊</li>
-<li>搜尋可參考的資料；根據以往寫程式的經驗來推斷怎麼做</li>
-<li>反覆實驗，先做出一定的成果再來想細節，<code>不要一開始就想要做出完美成果</code></li>
-</ol>
-<p>在後續的作業我大致上是照著這三點去執行，當然如果有真的寫不出來的狀況，就去多多觀摩其他人的做法並且學起來。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://kuangtsao.github.io/2021/11/12/alphacamp-2-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Marcus Liu">
-      <meta itemprop="description" content="鐵柵間的微光指引我的道路">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="囚徒的窗格">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/12/alphacamp-2-1/" class="post-title-link" itemprop="url">Alphacamp 學期 2-1 學習回饋</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-
-      <time title="創建時間：2021-11-12 00:59:15" itemprop="dateCreated datePublished" datetime="2021-11-12T00:59:15+08:00">2021-11-12</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新於</span>
-        <time title="修改時間：2022-01-28 17:00:42" itemprop="dateModified" datetime="2022-01-28T17:00:42+08:00">2022-01-28</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>這個學期主要進行的是：</p>
-<h3 id="Javascript"><a href="#Javascript" class="headerlink" title="Javascript"></a>Javascript</h3><ul>
-<li>概念上的加深 ex. scope</li>
-<li>資料結構簡介與設計</li>
-<li>函式(function)介紹<h3 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h3></li>
-<li>CSS 佈局工具</li>
-<li>BootStrap 介紹與使用</li>
-<li>RWD 簡介<h3 id="DOM-操作與事件處理"><a href="#DOM-操作與事件處理" class="headerlink" title="DOM 操作與事件處理"></a>DOM 操作與事件處理</h3></li>
-<li>簡介 DOM</li>
-<li>操作 DOM</li>
-<li>實際設計事件驅動程式</li>
-</ul>
-<p>在這四個禮拜內，這些內容說多也算多，說說少也不少；內容如同我之前的感受一樣，看起來很難，但實際上參與進去之後會發現還蠻簡單的或者被炸飛。  </p>
-<p>不過其實最想談的是，這一個學習我歷經了身份的轉變，由工作中進修變成了全職學習，目前反而遇到的挑戰比較是如何保持專注在學習上，以及如何真的完成自己排下的進度—由於我之前是擔任維運工程師，也順便希望加強一些自己不足的東西，比如：aws(主要希望摸透<br>SAA),K8s，但目前的時間點也還沒開始動。</p>
-<p>希望進入到下一個學習階段時，能夠找到專注及處理焦慮的方式，以及能夠好好完成自己與 AC 排定的進度。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://kuangtsao.github.io/2021/11/11/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Marcus Liu">
-      <meta itemprop="description" content="鐵柵間的微光指引我的道路">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="囚徒的窗格">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/11/hello-world/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-
-      <time title="創建時間：2021-11-11 22:32:56" itemprop="dateCreated datePublished" datetime="2021-11-11T22:32:56+08:00">2021-11-11</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新於</span>
-        <time title="修改時間：2021-11-13 15:10:18" itemprop="dateModified" datetime="2021-11-13T15:10:18+08:00">2021-11-13</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>vnwojvnoiwjoiwjoiwjvoiwjvoiewjviwjeoijwvjewjivwoij</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
 
 
 
