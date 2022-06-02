@@ -21,27 +21,29 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"kuangtsao.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.8.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/js/config.js"></script>
-<meta name="description" content="為何會選擇這個專案？這個專案是對之前學到的技術的總體檢，裡面包含了 bootstrap 的應用，資料庫與 api 設計，CRUD 實作以及使用者認證我覺得將學到技術再組合成一個解決方案是很有挑戰性的，同時可以檢驗自己的是否學的扎實。 使用了什麼技術？前端利用了 bootstrap 與 font-awesome 做成了基本畫面，並利用 express 中的 partial view 功能與 conn">
+<meta name="description" content="前言Alphacamp 的最後一個階段的多人協作專案，simple twitter，目的是藉由打造一個簡單的 twitter 網站，以達到多人協作的開發目的；在一開始找組別時，非常感謝劉明與 ruby 找我一組，沒想到最大的煩惱就在一開始解決了。 專案介紹 github repo 專案 demo 前端： css, js, bootstrap, handlebars 後端: nodejs 的 exp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="semester-3-A3">
-<meta property="og:url" content="https://kuangtsao.github.io/2022/04/10/semester-3-A3/index.html">
+<meta property="og:title" content="alphacamp simple twitter 協作心得">
+<meta property="og:url" content="https://kuangtsao.github.io/2022/06/03/alphacamp-simple-twitter-%E5%8D%94%E4%BD%9C%E5%BF%83%E5%BE%97/index.html">
 <meta property="og:site_name" content="囚徒的窗格">
-<meta property="og:description" content="為何會選擇這個專案？這個專案是對之前學到的技術的總體檢，裡面包含了 bootstrap 的應用，資料庫與 api 設計，CRUD 實作以及使用者認證我覺得將學到技術再組合成一個解決方案是很有挑戰性的，同時可以檢驗自己的是否學的扎實。 使用了什麼技術？前端利用了 bootstrap 與 font-awesome 做成了基本畫面，並利用 express 中的 partial view 功能與 conn">
+<meta property="og:description" content="前言Alphacamp 的最後一個階段的多人協作專案，simple twitter，目的是藉由打造一個簡單的 twitter 網站，以達到多人協作的開發目的；在一開始找組別時，非常感謝劉明與 ruby 找我一組，沒想到最大的煩惱就在一開始解決了。 專案介紹 github repo 專案 demo 前端： css, js, bootstrap, handlebars 後端: nodejs 的 exp">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2022-04-10T07:27:32.000Z">
-<meta property="article:modified_time" content="2022-04-10T07:30:42.460Z">
+<meta property="og:image" content="https://kuangtsao.github.io/images/simple-twitter.png">
+<meta property="article:published_time" content="2022-06-02T19:32:28.000Z">
+<meta property="article:modified_time" content="2022-06-02T20:14:20.390Z">
 <meta property="article:author" content="Marcus Liu">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kuangtsao.github.io/images/simple-twitter.png">
 
 
-<link rel="canonical" href="https://kuangtsao.github.io/2022/04/10/semester-3-A3/">
+<link rel="canonical" href="https://kuangtsao.github.io/2022/06/03/alphacamp-simple-twitter-%E5%8D%94%E4%BD%9C%E5%BF%83%E5%BE%97/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://kuangtsao.github.io/2022/04/10/semester-3-A3/","path":"2022/04/10/semester-3-A3/","title":"semester-3-A3"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://kuangtsao.github.io/2022/06/03/alphacamp-simple-twitter-%E5%8D%94%E4%BD%9C%E5%BF%83%E5%BE%97/","path":"2022/06/03/alphacamp-simple-twitter-協作心得/","title":"alphacamp simple twitter 協作心得"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>semester-3-A3 | 囚徒的窗格</title>
+<title>alphacamp simple twitter 協作心得 | 囚徒的窗格</title>
   
 
 
@@ -108,7 +110,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%BA%E4%BD%95%E6%9C%83%E9%81%B8%E6%93%87%E9%80%99%E5%80%8B%E5%B0%88%E6%A1%88%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">為何會選擇這個專案？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%BA%86%E4%BB%80%E9%BA%BC%E6%8A%80%E8%A1%93%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">使用了什麼技術？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%AA%E9%83%A8%E5%88%86%E4%BD%A0%E7%9B%B8%E5%B0%8D%E8%83%BD%E6%8E%8C%E6%8F%A1%EF%BC%9F%E5%93%AA%E8%A3%A1%E8%8A%B1%E4%BA%86%E6%9C%80%E5%A4%9A%E6%99%82%E9%96%93%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">哪部分你相對能掌握？哪裡花了最多時間？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%8E%E7%A8%8B%E4%B8%AD%E7%A2%B0%E5%88%B0%E4%BB%80%E9%BA%BC%E5%9B%B0%E9%9B%A3%EF%BC%9F%E5%8F%88%E5%A6%82%E4%BD%95%E5%85%8B%E6%9C%8D%EF%BC%9F%EF%BC%88%E4%BE%8B%E5%A6%82%EF%BC%9A%E6%9F%A5%E6%89%BE%E7%B6%B2%E8%B7%AF%E6%96%87%E4%BB%B6%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">過程中碰到什麼困難？又如何克服？（例如：查找網路文件）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%8E%E7%A8%8B%E4%B8%AD%E4%BD%A0%E6%9C%89%E5%B0%8D%E5%93%AA%E5%80%8B%E6%8A%80%E8%A1%93%E6%9C%89%E7%89%B9%E5%88%A5%E6%B7%B1%E5%88%BB%E7%9A%84%E5%AD%B8%E7%BF%92%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">過程中你有對哪個技術有特別深刻的學習？</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%88%E6%A1%88%E4%BB%8B%E7%B4%B9"><span class="nav-number">2.</span> <span class="nav-text">專案介紹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E8%B2%A0%E8%B2%AC%E5%8A%9F%E8%83%BD"><span class="nav-number">3.</span> <span class="nav-text">主要負責功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-number">4.</span> <span class="nav-text">心得</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -165,7 +167,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://kuangtsao.github.io/2022/04/10/semester-3-A3/">
+    <link itemprop="mainEntityOfPage" href="https://kuangtsao.github.io/2022/06/03/alphacamp-simple-twitter-%E5%8D%94%E4%BD%9C%E5%BF%83%E5%BE%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -178,7 +180,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          semester-3-A3
+          alphacamp simple twitter 協作心得
         </h1>
 
         <div class="post-meta-container">
@@ -190,7 +192,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2022-04-10 15:27:32 / 修改時間：15:30:42" itemprop="dateCreated datePublished" datetime="2022-04-10T15:27:32+08:00">2022-04-10</time>
+      <time title="創建時間：2022-06-03 03:32:28 / 修改時間：04:14:20" itemprop="dateCreated datePublished" datetime="2022-06-03T03:32:28+08:00">2022-06-03</time>
     </span>
 
   
@@ -203,12 +205,30 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h3 id="為何會選擇這個專案？"><a href="#為何會選擇這個專案？" class="headerlink" title="為何會選擇這個專案？"></a>為何會選擇這個專案？</h3><p>這個專案是對之前學到的技術的總體檢，裡面包含了 bootstrap 的應用，資料庫與 api 設計，CRUD 實作以及使用者認證<br>我覺得將學到技術再組合成一個解決方案是很有挑戰性的，同時可以檢驗自己的是否學的扎實。</p>
-<h3 id="使用了什麼技術？"><a href="#使用了什麼技術？" class="headerlink" title="使用了什麼技術？"></a>使用了什麼技術？</h3><p>前端利用了 bootstrap 與 font-awesome 做成了基本畫面，並利用 express 中的 partial view 功能與 connect-flash 做結合，達到推送錯誤訊息給使用者的效果。  </p>
-<p>後端方面：利用 passport 的本地策略達成了使用者認證，並利用 bcrypt 對敏感資料進行雜湊；<br>資料取得方面，利用 moogoose 和 async/await 做搭配，以達到每個 database opreation 都能確定執行完的效果。</p>
-<h3 id="哪部分你相對能掌握？哪裡花了最多時間？"><a href="#哪部分你相對能掌握？哪裡花了最多時間？" class="headerlink" title="哪部分你相對能掌握？哪裡花了最多時間？"></a>哪部分你相對能掌握？哪裡花了最多時間？</h3><p>相對能掌握的部份應當是資料庫與 api 設計，以及實現後端功能部分；建立種子資料的部分花了比較的時間，考慮到先後順序以及原始資料的處理花了稍微長的時間。</p>
-<h3 id="過程中碰到什麼困難？又如何克服？（例如：查找網路文件）"><a href="#過程中碰到什麼困難？又如何克服？（例如：查找網路文件）" class="headerlink" title="過程中碰到什麼困難？又如何克服？（例如：查找網路文件）"></a>過程中碰到什麼困難？又如何克服？（例如：查找網路文件）</h3><p>該專案由於有時效性，所以放棄了一些規格沒有提到的功能，以 MVP 的方式進行開發。</p>
-<h3 id="過程中你有對哪個技術有特別深刻的學習？"><a href="#過程中你有對哪個技術有特別深刻的學習？" class="headerlink" title="過程中你有對哪個技術有特別深刻的學習？"></a>過程中你有對哪個技術有特別深刻的學習？</h3><p>async/await，在 moogoose 的官方網站上有提到搭配起來正確的用法，並將其應用在需要的場合。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Alphacamp 的最後一個階段的多人協作專案，simple twitter，目的是藉由打造一個簡單的 twitter 網站，以達到多人協作的開發目的；在一開始找組別時，非常感謝劉明與 ruby 找我一組，沒想到最大的煩惱就在一開始解決了。</p>
+<h2 id="專案介紹"><a href="#專案介紹" class="headerlink" title="專案介紹"></a>專案介紹</h2><p><img src="/images/simple-twitter.png" alt="網站截圖"></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/kuangtsao/twitter-fullstack-2020">github repo</a></p>
+<p><a target="_blank" rel="noopener" href="https://thawing-wave-37276.herokuapp.com/">專案 demo</a></p>
+<p>前端： css, js, bootstrap, handlebars</p>
+<p>後端: nodejs 的 express 框架，依照 RESTful 的方式進行路由設計。</p>
+<p>利用 Notion 的功能進行文件分類與進度控管<br>Discord 作為主要的交流方式</p>
+<h2 id="主要負責功能"><a href="#主要負責功能" class="headerlink" title="主要負責功能"></a>主要負責功能</h2><ul>
+<li>當大家的 git master<ul>
+<li>引入 github flow</li>
+<li>帶組員操作 git 功能，協作上不煩惱 </li>
+<li>github 的使用體驗改善</li>
+<li>引導解 conflict，以及讓組員能夠自行 merge code 到 master 分支</li>
+</ul>
+</li>
+<li>專案的基礎建設</li>
+<li>推文與回復功能</li>
+<li>編輯會員資料與編輯個人主頁功能</li>
+<li>api 版編輯功能</li>
+</ul>
+<h2 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h2><p>首先非常感謝 ruby 一路建設好文件的架構，並且清楚說我們的進度在哪裡，還有說出很重要的一件事 <strong>「吵架了也不要消失」</strong>，但在過程之中也沒吵過半次；另外劉明在我眼中也是就有種必殺仕事人的感覺，感覺功能都難不倒他。</p>
+<p>由於我們很早開始進行，相對其他組，我們比較有充裕的時間進行各個 sprint，開發過程大部分來講也都是順暢的；困擾的前端畫面也在劉明的極大貢獻，至少還是有著一個型出來。</p>
+<p>途中我也利用著前份工作經驗，帶領兩位比較沒有經驗的夥伴利用 git 一起進行協作，目前觀察下來我們組應該是協作起來蠻順暢的。兩位組員到了後期，面對 conflict 和自行 merge 到 master 沒有那麼大的心靈壓力。</p>
+<p>在此我體驗到了與他人協作開發會是什麼樣的狀況，非常感謝兩位組員的協作與付出！</p>
 
     </div>
 
@@ -222,14 +242,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/02/14/browser-event-loop/" rel="prev" title="browser-event-loop">
-                  <i class="fa fa-chevron-left"></i> browser-event-loop
+                <a href="/2022/04/10/semester-3-A3/" rel="prev" title="semester-3-A3">
+                  <i class="fa fa-chevron-left"></i> semester-3-A3
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/06/03/alphacamp-simple-twitter-%E5%8D%94%E4%BD%9C%E5%BF%83%E5%BE%97/" rel="next" title="alphacamp simple twitter 協作心得">
-                  alphacamp simple twitter 協作心得 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
